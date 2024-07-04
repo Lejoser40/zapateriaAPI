@@ -2,6 +2,7 @@ import express from 'express'
 import usuariosRoute from './routes/usuarios.js'
 import loginsRoute from './routes/logins.js'
 import cors from 'cors'
+//import { Dotenv } from 'dotenv'
 
 const app = express()
 const PORT = process.env.PORT
