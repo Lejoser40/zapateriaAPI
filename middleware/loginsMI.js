@@ -105,8 +105,8 @@ export async function getLog(username, password) {
             if (tempUsr.intentos > 1) {
                 updateLoginInhabilitado(true, tempUsr.id)
                 atemps.splice(tempUsr, 1)
-                console.log('usuario inhabilitado')
-                console.log(atemps)
+                /*console.log('usuario inhabilitado')
+                console.log(atemps)*/
                 return
             }
             const index = atemps.indexOf(tempUsr)
@@ -114,7 +114,6 @@ export async function getLog(username, password) {
             newIntento = newIntento + 1
             atemps[index].intentos = newIntento
             console.log(atemps[index])
-
         }
 
     }

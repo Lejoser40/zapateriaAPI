@@ -16,7 +16,6 @@ app.use(express.json())
     })
 )*/
 
-
 app.use('/usuarios', usuariosRoute)
 app.use('/logins', loginsRoute)
 
