@@ -1,4 +1,4 @@
-import { getUsuarios,getUser,createUser } from "../middleware/usuariosMI.js"
+import { getUsuarios,getUser,createUser } from "../utils/usuariosMI.js"
 import express from 'express'
 
 const router = express.Router();
