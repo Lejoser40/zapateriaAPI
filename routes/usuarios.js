@@ -1,3 +1,4 @@
+import { isAuthenticated } from "../middleware/isAuthenticated.js";
 import { getUsuarios,getUser,createUser } from "../utils/usuariosMI.js"
 import express from 'express'
 

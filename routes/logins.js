@@ -16,8 +16,8 @@ router.get('/:username/:password', async (req, res) => {
     if(code == 200){
         req.session.isLoggedIn = true;
         req.session.userId = data[0].id;
-        // console.log(req.session)
-        // console.log(req.session.id)
+        console.log(req.session)
+        console.log(req.session.id)
     }
     res.status(code).send(data)
 })
