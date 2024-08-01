@@ -13,26 +13,26 @@ import { isAuthenticated } from './middleware/isAuthenticated.js'
 const app = express()
 const PORT = process.env.PORT
 
-app.use(cors())
+// app.use(cors())
 app.use(session({
     secret: '12345',
-    resave: false,
     saveUninitialized: true,
     cookie: {
         maxAge: 60000 * 60
     }
 }))
 app.use(express.json())
-/*app.use(
+app.use(
     cors({
-        origin: "*",
-        methods: ["GET", "POST"]
+        origin: "http://localhost:5173",
+        credentials: true
+        // methods: ["GET", "POST"]
     })
-)*/
+)
 
 app.use('/logins', loginsRoute)
 
-app.use(isAuthenticated)
+// app.use(isAuthenticated)
 
 app.use('/usuarios', usuariosRoute)
 app.use('/inventario', inventarioRoute)
@@ -41,7 +41,7 @@ app.use('/facturacion', facturacion)
 
 
 app.use((err, req, res, next) => {
-    res.status(500).send('Something broke 💩!')
+    res.status(500).send({error:'Something broke 💩!'})
 })
 
 app.listen(PORT, () => {

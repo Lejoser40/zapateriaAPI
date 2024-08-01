@@ -22,10 +22,10 @@ router.get('/:username/:password', async (req, res) => {
     res.status(code).send(data)
 })
 
-// router.post('/logout', (req, res) => {
-//     req.session.destroy();
-//     console.log('session cerrada')
-// });
+router.post('/logout', (req, res) => {
+    req.session.destroy();
+    res.send({msg:'session cerrada'})
+});
 
 router.post("/", async (req, res) => {
     const { id_usuario,username,password,inhabilidato,eliminado,acceso } = req.body

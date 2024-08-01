@@ -1,58 +1,59 @@
 import pool from '../database.js'
 
-export async function createFactura(id_usuario,cliente, zapatos) {
+export async function createFactura(id_usuario, cliente, zapatos) {
     console.log(zapatos)
 
-    // retorna el id de la factura
+    let resultados = []
+
+    // console.log('aaaaaaaaaaaaaaa')
+
+    // console.log(`id_usuario: ${id_usuario}`)
+    // console.log(`id_usuario: ${cliente}`)
+
     const numeroFactura = await initFactura(id_usuario, cliente, zapatos)
+
+    console.log(`factura: ${numeroFactura}`)
 
 
     // arreglar esto
     for (let i = 0; i < zapatos.length; i++) {
-        const [result] = await pool.query(`
-            insert into detalles ( id_producto,cantidad, precio )
-            values (?,?,?)`,
-            [
-                zapatos[i].id, zapatos[i].cantidad, zapatos[i].precio
-            ]
-        )
-        resultados.push(result.insertId)
+        const query = `insert into detalles ( id_factura,id_producto,cantidad, precio ) values (?,?,?,?)`
+        try {
+            const [result] = await pool.query(query, [numeroFactura, zapatos[i].id, zapatos[i].cantidad, zapatos[i].precio])
+            resultados.push(result)
+        } catch (err) {
+            console.log(err)
+        }
     }
-    const [rows] = await pool.query("select * from inventario where stock > 0;")
 
+    // console.log('aaaaaaaaaaaaa')
+    console.log(resultados)
+
+    return numeroFactura
 
 
 
     // crea la factura
-    async function initFactura(id_usuario, cliente, zapatos){
+    async function initFactura(id_usuario, cliente, zapatos) {
+        // console.log('asdsadsadsa')
         let total = 0;
         var newDate = new Date()
+        let result
 
         for (let i = 0; i < zapatos.length; i++) {
             const precio = zapatos[i].precio
             total += precio
         }
-        
-        const fecha = newDate.getDate()
-    
+
         const query = `insert into facturas (id_usuario, cliente, fecha, total) values (?,?,?,?)`
-    
-        const [result] = await pool.query(query,[id_usuario,cliente,fecha,total])
+
+        console.log('2')
+        try {
+            [result] = await pool.query(query, [id_usuario, cliente, newDate, total])
+        } catch (err) {
+            console.log(err)
+        }
+        console.log('3')
         return result.insertId
     }
-
-
-
-    // for (let i = 0; i < zapatos.length; i++) {
-    //     const [result] = await pool.query(`
-    //         insert into detalles ( id_producto,cantidad, precio )
-    //         values (?,?,?)`,
-    //         [
-    //             zapatos[i].id, zapatos[i].cantidad, zapatos[i].precio
-    //         ]
-    //     )
-    //     resultados.push(result.insertId)
-    // }
-    //const [rows] = await pool.query("select * from inventario where stock > 0;")
-
 }
