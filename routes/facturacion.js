@@ -1,5 +1,5 @@
 import express from 'express'
-import { createFactura } from '../utils/facturacionUtils.js'
+import { createFactura, facturar, getAllFacturas } from '../utils/facturacionUtils.js'
 
 const router = express.Router()
 
@@ -10,11 +10,23 @@ router.post("/", async (req, res) => {
     console.log(req.session)
     console.log(req.session.id)
 
-    const { cliente, zapatos} = req.body
-    console.log('cleinte :'+cliente)
-    console.log('zapatos :'+ zapatos)
-    const numeroFactura = await createFactura(user,cliente, zapatos)
-    res.send({numerofactura: numeroFactura})
+    const { cliente, zapatos } = req.body
+    console.log('cleinte :' + cliente)
+    console.log('zapatos :' + zapatos)
+    const numeroFactura = await createFactura(user, cliente, zapatos)
+    res.send({ numerofactura: numeroFactura, nombre: cliente })
 })
+
+router.get("/", async (req, res) => {
+    const facturas = await getAllFacturas()
+    res.send(facturas)
+})
+
+router.put("/", async (req, res) => {
+    const { id, total, colones, dolares, tarjeta } = req.body
+    const vuelto = await facturar(id, total, colones, dolares, tarjeta)
+    res.send({vuelto: vuelto})
+})
+
 
 export default router

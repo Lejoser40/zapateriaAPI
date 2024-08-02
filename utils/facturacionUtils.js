@@ -20,7 +20,8 @@ export async function createFactura(id_usuario, cliente, zapatos) {
         const query = `insert into detalles ( id_factura,id_producto,cantidad, precio ) values (?,?,?,?)`
         try {
             const [result] = await pool.query(query, [numeroFactura, zapatos[i].id, zapatos[i].cantidad, zapatos[i].precio])
-            resultados.push(result)
+            resultados.push(result.insertId)
+            resInventario(zapatos[i].id)
         } catch (err) {
             console.log(err)
         }
@@ -32,6 +33,15 @@ export async function createFactura(id_usuario, cliente, zapatos) {
     return numeroFactura
 
 
+
+    async function resInventario(id){
+        try{
+            const query = `UPDATE inventario SET stock = stock - 1 WHERE id = ?;`
+            await pool.query(query, [id])
+        } catch (err){
+            console.log(err)
+        }
+    }
 
     // crea la factura
     async function initFactura(id_usuario, cliente, zapatos) {
@@ -45,7 +55,7 @@ export async function createFactura(id_usuario, cliente, zapatos) {
             total += precio
         }
 
-        const query = `insert into facturas (id_usuario, cliente, fecha, total) values (?,?,?,?)`
+        const query = `insert into facturas (id_usuario, cliente, fecha, total, concretada) values (?,?,?,?,false)`
 
         console.log('2')
         try {
@@ -56,4 +66,28 @@ export async function createFactura(id_usuario, cliente, zapatos) {
         console.log('3')
         return result.insertId
     }
+}
+
+export async function facturar(id, total, colones, dolares, tarjeta){
+    // const query = `UPDATE facturas SET tarjeta = ?, colones = ?, dolares = ?, concretada = ? WHERE id = ?;`
+    // console.log(id, total, colones, dolares, tarjeta)
+
+    const query2 = `UPDATE facturas SET tarjeta = ?, colones = ?, dolares = ?, concretada = ? WHERE (id = ?)`
+    let rows
+    try{
+        [rows] = await pool.query(query2,[tarjeta, colones, dolares, true, id])
+    }catch(err){
+        console.log(err)
+    }  
+
+    const suma = colones + dolares + tarjeta
+    const vuelto = Math.abs(total - suma)
+    
+    return vuelto
+}
+
+export async function getAllFacturas(){
+    const [rows] = await pool.query("SELECT * FROM facturas where concretada = false")
+
+    return rows
 }
