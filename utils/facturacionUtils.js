@@ -78,12 +78,21 @@ export async function facturar(id, total, colones, dolares, tarjeta){
         [rows] = await pool.query(query2,[tarjeta, colones, dolares, true, id])
     }catch(err){
         console.log(err)
-    }  
+    } 
+    
+    const cambio_dolar = await getCambioDolar()
+    const conversion = Math.floor(dolares * cambio_dolar[0].cambio_dolar)
 
-    const suma = colones + dolares + tarjeta
+    const suma = Math.floor(colones + conversion + tarjeta)
     const vuelto = Math.abs(total - suma)
     
     return vuelto
+
+
+    async function getCambioDolar(){
+        const [rows] = await pool.query("select cambio_dolar from contabilidad")
+        return rows
+    }
 }
 
 export async function getAllFacturas(){
