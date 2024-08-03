@@ -100,3 +100,40 @@ export async function getAllFacturas(){
 
     return rows
 }
+
+export async function getInformes(id){
+    let total = 0
+    let tarjeta = 0
+    let colones = 0
+    let dolares = 0
+    
+    try{
+        const query = `select * from facturas where DATE(fecha) = CURRENT_DATE AND id_usuario = ?`
+        const [rows] = await pool.query(query,[id])
+        
+        for(let i = 0; i < rows.length; i++){
+            total += rows[i].total
+            tarjeta += rows[i].tarjeta
+            colones += rows[i].colones
+            dolares += rows[i].dolares
+        }
+
+        console.log('total:'+total)
+        console.log('tarjeta:'+tarjeta)
+        console.log('colones:'+colones)
+        console.log('dolares:'+dolares)
+
+        const conta = {
+            total: total,
+            tarjeta: tarjeta,
+            colones: colones,
+            dolares: dolares
+        }
+        
+        
+        return JSON.stringify(conta)
+
+    }catch(err){
+        return err
+    }
+}
