@@ -118,10 +118,10 @@ export async function getInformes(id){
             dolares += rows[i].dolares
         }
 
-        console.log('total:'+total)
-        console.log('tarjeta:'+tarjeta)
-        console.log('colones:'+colones)
-        console.log('dolares:'+dolares)
+        // console.log('total:'+total)
+        // console.log('tarjeta:'+tarjeta)
+        // console.log('colones:'+colones)
+        // console.log('dolares:'+dolares)
 
         const conta = {
             total: total,
