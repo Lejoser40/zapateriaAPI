@@ -1,11 +1,17 @@
 import express from 'express'
-import { add, getAll, getDisponibles } from '../utils/inventarioUtils.js'
+import { add, getAll, getDisponibles, update } from '../utils/inventarioUtils.js'
 
 const router = express.Router()
 
 router.post('/', async (req, res) => {
     const { producto, descripcion, precio, stock } = req.body
     const zapato = await add(producto, descripcion, precio, stock)
+    res.send(zapato)
+})
+
+router.put('/', async (req, res) => {
+    const { id,producto, descripcion, precio, stock } = req.body
+    const zapato = await update(id,producto, descripcion, precio, stock)
     res.send(zapato)
 })
 

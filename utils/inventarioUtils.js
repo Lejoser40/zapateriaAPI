@@ -20,3 +20,14 @@ export async function add(producto, descripcion, precio, stock) {
         return err
     }
 }
+
+export async function update(id,producto, descripcion, precio, stock) {
+    const query = `UPDATE inventario SET producto = ?  , descripcion = ? ,precio = ?, stock = ? where id = ? `
+    try{
+        const [rows] = await pool.query(query,[producto, descripcion, precio, stock,id])
+        return rows
+    }catch(err){
+        console.log(rows)
+        return err
+    }
+}
