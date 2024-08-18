@@ -31,3 +31,16 @@ export async function update(id,producto, descripcion, precio, stock) {
         return err
     }
 }
+
+export async function borrar(id) {
+    const query = `DELETE FROM inventario where id = ? `
+    // try{
+    //     const [rows] = await pool.query(query,[id])
+    //     return rows
+    // }catch(err){
+    //     console.log(rows)
+    //     return err
+    // }
+    const [rows] = await pool.query(query,[id])
+    return rows
+}

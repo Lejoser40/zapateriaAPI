@@ -1,5 +1,5 @@
 import express from 'express'
-import { add, getAll, getDisponibles, update } from '../utils/inventarioUtils.js'
+import { add, borrar, getAll, getDisponibles, update } from '../utils/inventarioUtils.js'
 
 const router = express.Router()
 
@@ -12,6 +12,12 @@ router.post('/', async (req, res) => {
 router.put('/', async (req, res) => {
     const { id,producto, descripcion, precio, stock } = req.body
     const zapato = await update(id,producto, descripcion, precio, stock)
+    res.send(zapato)
+})
+
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params
+    const zapato = await borrar(id)
     res.send(zapato)
 })
 
