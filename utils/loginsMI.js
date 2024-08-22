@@ -125,6 +125,17 @@ export async function updateLoginInhabilitado(value, idUsuario) {
                     WHERE id_usuario = ?`, [value, idUsuario])
 }
 
+export async function setEliminado(id) {
+
+    try{
+        await pool.query(`UPDATE zapateria.logins SET eliminado = true WHERE id = ?`, [id])
+    } catch(err){
+        console.log(err)
+    }
+
+}
+
+
 export async function createLogin(id_usuario, username, password, inhabilidato,) {
     try {
         const hashedPassword = await bcrypt.hash(password, 10)
@@ -143,5 +154,28 @@ export async function createLogin(id_usuario, username, password, inhabilidato,)
         return { data: login, code: 201 }
     } catch {
         return ('Error 💩!')
+    }
+}
+
+export async function updateLogin(id_usuario, username, inhabilidato,) {
+
+    const query = `UPDATE logins
+    SET
+    username = ?,
+    inhabilidato = ?
+    WHERE id = ?`;
+    
+    try {
+        // const hashedPassword = await bcrypt.hash(password, 10)
+        const [result] = await pool.query(query,
+            [
+                username, inhabilidato, id_usuario
+            ]
+        )
+        const login = getLogins(result.insertId)
+        return { data: login, code: 201 }
+    } catch(err) {
+        console.log(err)
+        return {error: 'Error 💩!', code: 400}
     }
 }

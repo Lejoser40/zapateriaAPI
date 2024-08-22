@@ -1,5 +1,5 @@
 import express from 'express'
-import { getLogins,getLog,createLogin } from '../utils/loginsMI.js'
+import { getLogins,getLog,createLogin, updateLogin, setEliminado } from '../utils/loginsMI.js'
 import { addBitacora } from '../utils/bitacoraUtils.js'
 
 const router = express.Router()
@@ -36,6 +36,18 @@ router.post("/", async (req, res) => {
     const { id_usuario,username,password,inhabilidato } = req.body
     const {data, code} = await createLogin(id_usuario,username,password,inhabilidato)
     res.status(code).send(data)
+})
+
+router.put("/", async (req, res) => {
+    const { id_usuario,username,inhabilidato } = req.body
+    const {data, code} = await updateLogin(id_usuario,username,inhabilidato)
+    res.status(code).send(data)
+})
+
+router.delete("/:id", async (req, res) => {
+    const { id } = req.params
+    await setEliminado(id)
+    res.status(200).send({msj: 'usuario Eliminado'})
 })
 
 export default router
