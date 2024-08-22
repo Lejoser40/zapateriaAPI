@@ -8,3 +8,31 @@ export async function addBitacora(id_usuario,username,accion){
                     values (?,?,?,?)`,
                     [id_usuario,username,accion,fecha])
 }
+
+export async function getAll(){
+    
+    const query = `SELECT * FROM bitacora`;
+
+    try{
+        const [result] = await pool.query(query)
+        return result
+    } catch(err){
+        console.log(err)
+    }
+
+    return result
+}
+
+export async function getToday(){
+    
+    const query = `SELECT * FROM bitacora where fecha = CURRENT_DATE()`;
+
+    try{
+        const [result] = await pool.query(query)
+        return result
+    } catch(err){
+        console.log(err)
+    }
+
+    return result
+}

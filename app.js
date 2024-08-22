@@ -8,6 +8,7 @@ import loginsRoute from './routes/logins.js'
 import inventarioRoute from './routes/inventario.js'
 import contabilidadRoute from './routes/contabilidad.js'
 import facturacion from './routes/facturacion.js'
+import bitacora from './routes/bitacora.js'
 import { isAuthenticated } from './middleware/isAuthenticated.js'
 
 const app = express()
@@ -38,6 +39,7 @@ app.use('/usuarios', usuariosRoute)
 app.use('/inventario', inventarioRoute)
 app.use('/contabilidad', contabilidadRoute)
 app.use('/facturacion', facturacion)
+app.use('/bitacora', bitacora)
 
 
 app.use((err, req, res, next) => {
