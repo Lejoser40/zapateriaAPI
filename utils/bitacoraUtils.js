@@ -25,7 +25,7 @@ export async function getAll(){
 
 export async function getToday(){
     
-    const query = `SELECT * FROM bitacora where fecha = CURRENT_DATE()`;
+    const query = `SELECT * FROM bitacora where date(fecha) = CURRENT_DATE()`;
 
     try{
         const [result] = await pool.query(query)

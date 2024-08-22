@@ -125,7 +125,7 @@ export async function updateLoginInhabilitado(value, idUsuario) {
                     WHERE id_usuario = ?`, [value, idUsuario])
 }
 
-export async function createLogin(id_usuario, username, password, inhabilidato, eliminado, acceso) {
+export async function createLogin(id_usuario, username, password, inhabilidato,) {
     try {
         const hashedPassword = await bcrypt.hash(password, 10)
         const [result] = await pool.query(`
@@ -136,7 +136,7 @@ export async function createLogin(id_usuario, username, password, inhabilidato, 
             values (?,?,?,?,?,?)`,
             [
                 id_usuario, username, hashedPassword,
-                inhabilidato, eliminado, acceso
+                inhabilidato, false, 0
             ]
         )
         const login = getLogins(result.insertId)

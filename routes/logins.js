@@ -1,5 +1,6 @@
 import express from 'express'
 import { getLogins,getLog,createLogin } from '../utils/loginsMI.js'
+import { addBitacora } from '../utils/bitacoraUtils.js'
 
 const router = express.Router()
 
@@ -16,20 +17,24 @@ router.get('/:username/:password', async (req, res) => {
     if(code == 200){
         req.session.isLoggedIn = true;
         req.session.userId = data[0].id;
+        req.session.user = data[0].nombre;
         console.log(req.session)
         console.log(req.session.id)
     }
     res.status(code).send(data)
 })
 
-router.post('/logout', (req, res) => {
+router.post('/logout', async (req, res) => {
+    const usuario = req.session.user
+    const id = req.session.userId
+    await addBitacora(id,usuario,'cierre de session')
     req.session.destroy();
     res.send({msg:'session cerrada'})
 });
 
 router.post("/", async (req, res) => {
-    const { id_usuario,username,password,inhabilidato,eliminado,acceso } = req.body
-    const {data, code} = await createLogin(id_usuario,username,password,inhabilidato,eliminado,acceso)
+    const { id_usuario,username,password,inhabilidato } = req.body
+    const {data, code} = await createLogin(id_usuario,username,password,inhabilidato)
     res.status(code).send(data)
 })
 
