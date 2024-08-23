@@ -22,6 +22,8 @@ export async function getLogin(id) {
 export async function getLog(username, password) {
     const [user] = await pool.query(`SELECT * FROM logins WHERE username = ?`, [username]);
 
+    console.log(user)
+
     // comprobar si el usuario existe y no esta eliminado
     if (user[0] == null || user[0].eliminado == 1) {
         const err = { error: 'user dont exist' }
@@ -65,7 +67,8 @@ export async function getLog(username, password) {
         const err = { error: 'Not allowd' }
         return { data: err, code: 406 }
 
-    } catch {
+    } catch(error) {
+        console.log(error)
         const err = { error: 'error 💩' }
         return { error: err, code: 400 }
     }

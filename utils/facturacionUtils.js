@@ -72,10 +72,15 @@ export async function facturar(id, total, colones, dolares, tarjeta){
     // const query = `UPDATE facturas SET tarjeta = ?, colones = ?, dolares = ?, concretada = ? WHERE id = ?;`
     // console.log(id, total, colones, dolares, tarjeta)
 
+    if(colones == '') colones = 0;
+    if(dolares == '') dolares = 0;
+    if(tarjeta == '') tarjeta = 0;
+    
+
     const query2 = `UPDATE facturas SET tarjeta = ?, colones = ?, dolares = ?, concretada = ? WHERE (id = ?)`
     let rows
     try{
-        [rows] = await pool.query(query2,[tarjeta, colones, dolares, true, id])
+        [rows] = await pool.query(query2,[Number(tarjeta), Number(colones),Number(dolares), true, id])
     }catch(err){
         console.log(err)
     } 
